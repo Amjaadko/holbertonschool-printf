@@ -2,7 +2,7 @@
 
 int main(void)
 {
-    _printf("Hello %s, char: %c, percent: %%\n", "Amjaad", 'A');
+    _printf("Hello %c %s %%\n", 'A', "World");
     return (0);
 }
 

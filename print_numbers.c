@@ -1,31 +1,41 @@
 #include "main.h"
 
 /**
- * print_number - Prints an integer
- * @n: The integer to print
+ * print_number - prints an integer
+ * @n: number to print
  *
- * Return: Number of characters printed
+ * Return: number of characters printed, or -1 on error
  */
 int print_number(int n)
 {
-    int count = 0;
-    unsigned int num;
+	int count = 0;
+	int r;
 
-    if (n < 0)
-    {
-        count += _putchar('-');
-        num = -n;
-    }
-    else
-    {
-        num = n;
-    }
+	if (n < 0)
+	{
+		r = _putchar('-');
+		if (r == -1)
+			return (-1);
+		count += r;
+		/* careful with INT_MIN */
+		if (n / 10 != 0)
+			count += print_number(-(n / 10));
+		r = _putchar('0' + (-(n % 10)));
+		if (r == -1)
+			return (-1);
+		return (count + r);
+	}
 
-    if (num / 10)
-        count += print_number(num / 10);
+	if (n / 10)
+	{
+		r = print_number(n / 10);
+		if (r == -1)
+			return (-1);
+		count += r;
+	}
 
-    count += _putchar((num % 10) + '0');
-
-    return (count);
+	r = _putchar('0' + (n % 10));
+	if (r == -1)
+		return (-1);
+	return (count + r);
 }
-

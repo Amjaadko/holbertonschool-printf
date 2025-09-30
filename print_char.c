@@ -1,16 +1,14 @@
 #include "main.h"
 
 /**
- * print_char - prints a character
- * @args: va_list containing the character
+ * print_char - prints the next variadic argument as a character
+ * @args: variadic argument list
  *
- * Return: number of characters printed (1)
+ * Return: number of characters printed (1) or -1 on error
  */
 int print_char(va_list args)
 {
-	char c = va_arg(args, int);
+	char c = (char)va_arg(args, int);
 
-	write(1, &c, 1);
-	return (1);
+	return (_putchar(c));
 }
-

@@ -1,24 +1,25 @@
 #include "main.h"
 
 /**
- * print_string - prints a string
- * @args: va_list containing the string
+ * print_string - prints a C-string (or (null) if NULL)
+ * @args: variadic argument list
  *
- * Return: number of characters printed
+ * Return: number of characters printed, or -1 on error
  */
 int print_string(va_list args)
 {
 	char *str = va_arg(args, char *);
-	int i = 0;
+	int count = 0, r;
 
-	if (!str)
+	if (str == NULL)
 		str = "(null)";
 
-	while (str[i])
+	while (*str)
 	{
-		write(1, &str[i], 1);
-		i++;
+		r = _putchar(*str++);
+		if (r == -1)
+			return (-1);
+		count += r;
 	}
-	return (i);
+	return (count);
 }
-

@@ -1,57 +1,56 @@
 #include "main.h"
-#include <stdarg.h>
-#include <unistd.h>
 
 /**
- * put_char - writes one character to stdout
- * @c: character to write
+ * print_unknown - prints '%' and the unknown specifier
+ * @c: the unknown specifier character
  *
- * Return: 1 on success, -1 on error
+ * Return: 2 on success, -1 on error
  */
-static int put_char(char c)
+static int print_unknown(char c)
 {
-	if (write(1, &c, 1) == -1)
+	if (_putchar('%') == -1)
 		return (-1);
-	return (1);
+	if (_putchar(c) == -1)
+		return (-1);
+	return (2);
 }
 
 /**
- * put_str - writes a C-string to stdout
- * @s: string to write; if NULL, prints "(null)"
+ * handle_percent - handles a percent sequence at format[i]
+ * @f: format string
+ * @i: index of the specifier (character after '%')
+ * @ap: variadic list
  *
- * Return: number of characters written, or -1 on error
+ * Return: number of chars printed, or -1 on error
  */
-static int put_str(const char *s)
+static int handle_percent(const char *f, int i, va_list ap)
 {
-	int i = 0;
+	int r;
 
-	if (s == NULL)
-		s = "(null)";
+	if (f[i] == '%')
+		return (_putchar('%'));
 
-	while (s[i] != '\0')
-	{
-		if (write(1, &s[i], 1) == -1)
-			return (-1);
-		i++;
-	}
-	return (i);
+	r = handle_specifier(f[i], ap);
+	if (r == -1)
+		return (-1);
+	if (r == -2)
+		return (print_unknown(f[i]));
+	return (r);
 }
 
 /**
  * _printf - produces output according to a format
  * @format: format string
  *
- * Supported specifiers: %c, %s, %%.
- * For any other specifier (e.g. %K, %!), prints '%' then the character.
+ * Supported: %c, %s, %%, %d, %i
+ * Unknown specifier: prints '%' then the character.
  *
  * Return: number of characters printed, or -1 on error
  */
 int _printf(const char *format, ...)
 {
 	va_list ap;
-	int count = 0;
-	int tmp;
-	int i = 0;
+	int i = 0, count = 0, r;
 
 	if (format == NULL)
 		return (-1);
@@ -61,7 +60,7 @@ int _printf(const char *format, ...)
 	{
 		if (format[i] != '%')
 		{
-			if (put_char(format[i]) == -1)
+			if (_putchar(format[i]) == -1)
 				return (va_end(ap), -1);
 			count++;
 		}
@@ -70,33 +69,10 @@ int _printf(const char *format, ...)
 			i++;
 			if (format[i] == '\0')
 				return (va_end(ap), -1);
-
-			if (format[i] == 'c')
-			{
-				if (put_char((char)va_arg(ap, int)) == -1)
-					return (va_end(ap), -1);
-				count++;
-			}
-			else if (format[i] == 's')
-			{
-				tmp = put_str(va_arg(ap, char *));
-				if (tmp == -1)
-					return (va_end(ap), -1);
-				count += tmp;
-			}
-			else if (format[i] == '%')
-			{
-				if (put_char('%') == -1)
-					return (va_end(ap), -1);
-				count++;
-			}
-			else
-			{
-				/* Unknown specifier: print '%' then the char */
-				if (put_char('%') == -1 || put_char(format[i]) == -1)
-					return (va_end(ap), -1);
-				count += 2;
-			}
+			r = handle_percent(format, i, ap);
+			if (r == -1)
+				return (va_end(ap), -1);
+			count += r;
 		}
 		i++;
 	}

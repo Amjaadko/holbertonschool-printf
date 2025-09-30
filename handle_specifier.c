@@ -42,4 +42,3 @@ int handle_specifier(char c, va_list args)
 
     return (0);
 }
-

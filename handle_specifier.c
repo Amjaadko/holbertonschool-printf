@@ -15,5 +15,9 @@ int handle_specifier(char spec, va_list args)
 		return (print_string(args));
 	if (spec == 'd' || spec == 'i')
 		return (print_number(va_arg(args, int)));
+	if (spec == 'b')
+        return (print_binary(args));
+
 	return (-2);
 }
+

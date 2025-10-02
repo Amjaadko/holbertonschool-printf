@@ -9,14 +9,14 @@
  */
 int handle_specifier(char spec, va_list args)
 {
-	if (spec == 'c')
-		return (print_char(args));
-	if (spec == 's')
-		return (print_string(args));
-	if (spec == 'd' || spec == 'i')
-		return (print_number(va_arg(args, int)));
-	if (spec == 'b')
-        return (print_binary(args));
+		if (spec == 'u')
+    return (print_unsigned(va_arg(args, unsigned int)));
+		if (spec == 'o')
+    return (print_octal(va_arg(args, unsigned int)));
+		if (spec == 'x')
+    return (print_hex(va_arg(args, unsigned int), 0));
+		if (spec == 'X')
+    return (print_hex(va_arg(args, unsigned int), 1));
 
 	return (-2);
 }

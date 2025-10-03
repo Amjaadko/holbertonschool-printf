@@ -1,86 +1,45 @@
-.TH _PRINTF 3 "September 2025" "holbertonschool-printf" "Library Functions Manual"
+.TH _printf 3 "September 2025" "Holberton School" "Library Functions Manual"
 .SH NAME
-_printf \- produce output according to a format
+_printf \- custom implementation of the printf function
 .SH SYNOPSIS
-.nf
-#include "main.h"
-
-int _printf(const char *format, ...);
-.fi
+.B #include "main.h"
+.br
+.B int _printf(const char *format, ...);
 .SH DESCRIPTION
-.B _printf()
-writes output to the standard output stream (file descriptor 1) according to a
-format string.
-The format string is composed of ordinary characters which are copied
-to the output as-is, and conversion specifiers which start with '%'.
-
-This project implements a subset of the C library
-.BR printf (3)
-features. The following conversion specifiers are supported:
-
-.IP \(bu 2
-.B %c
-\- print a single character (argument promoted to
-.I int
-).
-.IP \(bu 2
-.B %s
-\- print a NUL-terminated string. If the string pointer is
-.B NULL
-, the literal
-.B "(null)"
-is printed.
-.IP \(bu 2
-.B %%
-\- print a single percent sign.
-.IP \(bu 2
-.B %d
-, 
-.B %i
-\- print a signed decimal integer.
-
-The following
-.I are not handled
-by this project: flags (such as '+', ' ', '#', '0', '-'), field width,
-precision, length modifiers (h, l, etc.), and buffering identical to the
-standard library.
+The _printf function produces output according to a format string.
+.br
+This simplified version of printf supports the following conversion specifiers:
+.TP
+\fB%c\fP
+Print a single character.
+.TP
+\fB%s\fP
+Print a string of characters.
+.TP
+\fB%%\fP
+Print a percent sign.
+.TP
+\fB%d\fP, \fB%i\fP
+Print a signed decimal integer.
 .PP
-Behavior matches the standard
-.B printf
-as closely as possible for the supported specifiers:
-arguments are fetched using
-.BR va_start (3)
-/
-.BR va_arg (3)
-/
-.BR va_end (3)
-and characters are written with
-.BR write (2)
-.
+Flags, field width, precision and length modifiers are not handled.
 .SH RETURN VALUE
-Upon successful return, the function yields the number of characters printed
-(excluding the terminating null byte used for strings).
-If an error occurs, the function returns
-.BR \-1 .
-Common error cases include:
-.IP \(bu 2
-.B format
-is
-.BR NULL .
-.IP \(bu 2
-.B format
-ends with a lone '%' that is not followed by a valid specifier.
-.IP \(bu 2
-A low-level write error occurs.
+Returns the number of characters printed.
+On error (such as NULL format), returns \-1.
 .SH EXAMPLES
 .nf
-/* Example usage */
-#include <limits.h>
-#include "main.h"
-
-int main(void)
-{
-    int len;
-
-    len = _printf("Hello %s!\\n", "world");   /* prints: Hello world! */
-    _printf("Char: [%c]\\n", 'H');           /* prints: Char: [H] */_
+_printf("Hello %s\\n", "world");
+     => Hello world
+_printf("Char: %c\\n", 'A');
+     => Char: A
+_printf("Percent: %%\\n");
+     => Percent: %
+_printf("Number: %d\\n", 1024);
+     => Number: 1024
+_printf("Negative: %i\\n", -98);
+     => Negative: -98
+.fi
+.SH SEE ALSO
+printf(3)
+.SH AUTHORS
+Amjad(Amjaadko) Noura(noura398)
